@@ -15,7 +15,8 @@ namespace CloseGL::Geometry
 			std::vector<float> VertexData;
 			std::vector<bool> StripData;
 		};
-		std::vector<ThreadOut> outputs;
+		std::vector<ThreadOut> Outputs;
+		GeometryDataFormat Format;
 	};
 
 	template<int VertexPerPrimitive = 4>	//TData = double/float
@@ -62,7 +63,8 @@ namespace CloseGL::Geometry
 
 		std::vector<std::thread> threads;
 		GeometryPipelineOutput out;
-		out.outputs.resize(childThreads + 1);
+		out.Format = format_;
+		out.Outputs.resize(childThreads + 1);
 
 
 		const size_t mainThreadCount = primitiveCountEveryThread;
@@ -74,10 +76,10 @@ namespace CloseGL::Geometry
 			offset += count;
 
 
-			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, &out.outputs[i]);
+			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, &out.Outputs[i]);
 		}
 
-		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, &out.outputs[childThreads]);
+		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, &out.Outputs[childThreads]);
 
 		for (auto& p : threads) p.join();
 

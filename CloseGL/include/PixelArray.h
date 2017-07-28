@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 
 namespace CloseGL
 {
@@ -27,8 +28,7 @@ namespace CloseGL
 	template<typename TPixel>
 	inline void PixelArray<TPixel>::Clear(TPixel clearColor)
 	{
-		for (auto& px : pixels_)
-			px = clearColor;
+		std::fill(pixels_.begin(), pixels_.end(), clearColor);
 	}
 
 	template<typename TPixel>

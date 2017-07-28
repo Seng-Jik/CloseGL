@@ -4,7 +4,7 @@
 namespace CloseGL
 {
 	template<typename TPixel>
-	class Surface : PixelArray<TPixel>
+	class Surface : public PixelArray<TPixel>
 	{
 	public:
 		Surface(int width, int height);
@@ -27,7 +27,7 @@ namespace CloseGL
 	template<typename TPixel>
 	inline TPixel & Surface<TPixel>::GetPixel(int x, int y)
 	{
-		return *this[y * width_ + x];
+		return (*this)[y * width_ + x];
 	}
 
 	template<typename TPixel>

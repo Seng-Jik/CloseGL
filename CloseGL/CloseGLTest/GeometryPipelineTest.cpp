@@ -47,7 +47,7 @@ namespace CloseGLTest
 			auto pResult = pipe.Process(vert,false);
 
 			
-			for (auto& out : pResult.outputs) {
+			for (auto& out : pResult.Outputs) {
 				log << std::endl << "===========" << std::endl;
 				log << "OutPtr:" << &out << std::endl;
 				log << std::endl << "Verticle:" << std::endl;

@@ -19,6 +19,9 @@
     <Filter Include="Export Header Files\Geometry">
       <UniqueIdentifier>{f0ae9a41-7f9d-49ae-bdd4-e08d2a6897a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Export Header Files\PixelPipeline">
+      <UniqueIdentifier>{742d3c81-b819-4202-84e4-7ac1c577fd07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h">
@@ -50,6 +53,21 @@
     </ClInclude>
     <ClInclude Include="..\include\PrimitiveStriper.h">
       <Filter>Export Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FrameBuffer.h">
+      <Filter>Export Header Files\PixelPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PixelPipeline.h">
+      <Filter>Export Header Files\PixelPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PointRasterizater.h">
+      <Filter>Export Header Files\PixelPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\LineRasterizater.h">
+      <Filter>Export Header Files\PixelPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TriangleRasterizater.h">
+      <Filter>Export Header Files\PixelPipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 using namespace SDL;
 CloseGLTest::Toolkit::TestView::TestView(uint64_t timeout,int width, int height):
 	wnd_("CloseGL Demo",Rect<int32_t>{Window::Center,Window::Center,width,height},Window::WindowFlag::Null),
+	sur_(width,height),
 	timeout_(timeout)
 {
 	
@@ -21,15 +22,21 @@ void CloseGLTest::Toolkit::TestView::Run()
 		if (sdl_.QuitRequested()) break;
 
 		auto& sur = wnd_.GetWindowSurface();
-		sur.Shade([](int x, int y, Surface& thisSurface, auto nowColor)
+		sur.Shade([this](int x, int y, Surface& thisSurface, auto nowColor)
 		{
+			const auto& p = sur_.GetPixel(x, y);
 			return Color<uint8_t>{
-				static_cast<uint8_t>(255 * sin(x / 255.0)),
-				static_cast<uint8_t>(255 * cos(y / 255.0)),
-				static_cast<uint8_t>(255 * sin(x / 255.0) * cos(y / 255.0)),
-				1
+				static_cast<uint8_t>(255 * p.r),
+				static_cast<uint8_t>(255 * p.g),
+				static_cast<uint8_t>(255 * p.b),
+				static_cast<uint8_t>(255 * p.a)
 			};
 		});
 		wnd_.UpdateWindowSurface();
 	}
+}
+
+void CloseGLTest::Toolkit::TestView::SetUpdateFunction(std::function<void(float time, CloseGL::Surface<CloseGL::PixelFormats::ColorRGBA<float>>&)> update)
+{
+	update_ = update;
 }
