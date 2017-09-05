@@ -10,9 +10,9 @@ namespace CloseGLTest
 	{
 	public:
 		
-		TEST_METHOD(TestExport)
+		TEST_METHOD(TestTemplate)
 		{
-			Surface<PixelFormats::ColorRGBA<float>> surface;
+			Surface<PixelFormats::ColorRGBA<float>> surface(1024,768);
 		}
 
 	};
