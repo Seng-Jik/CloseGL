@@ -16,6 +16,9 @@
     <Filter Include="Export Header Files">
       <UniqueIdentifier>{d04d7f03-1d41-4577-a337-92aaf9ee7899}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Export Header Files\Geometry">
+      <UniqueIdentifier>{f0ae9a41-7f9d-49ae-bdd4-e08d2a6897a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h">
@@ -29,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="..\include\Surface.h">
       <Filter>Export Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GeometryDataFormat.h">
+      <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

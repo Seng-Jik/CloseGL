@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h" />
+    <ClInclude Include="..\include\GeometryDataFormat.h" />
     <ClInclude Include="..\include\PixelArray.h" />
     <ClInclude Include="..\include\PixelFormats.h" />
     <ClInclude Include="..\include\Surface.h" />
