@@ -1,5 +1,4 @@
 #pragma once
-#include "PrimitiveType.h"
 
 namespace CloseGL::Geometry
 {
@@ -16,6 +15,5 @@ namespace CloseGL::Geometry
 		size_t PositionElementOffset;
 		size_t UsedElementCount;
 		size_t ElementCount;
-		PrimitiveType type;
 	};
 }

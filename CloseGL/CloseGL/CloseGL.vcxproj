@@ -81,12 +81,13 @@
     <ClInclude Include="..\include\GeometryPass.h" />
     <ClInclude Include="..\include\GeometryPipeline.h" />
     <ClInclude Include="..\include\GeometryShader.h" />
+    <ClInclude Include="..\include\LineStriper.h" />
     <ClInclude Include="..\include\PixelArray.h" />
     <ClInclude Include="..\include\PixelFormats.h" />
-    <ClInclude Include="..\include\PrimitiveStriper.h" />
-    <ClInclude Include="..\include\PrimitiveType.h" />
     <ClInclude Include="..\include\Surface.h" />
+    <ClInclude Include="..\include\TriangleStriper.h" />
     <ClInclude Include="..\include\VertexShader.h" />
+    <ClInclude Include="..\include\VertexStriper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CloseGL.cpp" />

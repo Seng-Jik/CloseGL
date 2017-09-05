@@ -39,9 +39,6 @@
     <ClInclude Include="..\include\GeometryPipeline.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\PrimitiveType.h">
-      <Filter>Export Header Files\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\GeometryPass.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
@@ -51,7 +48,13 @@
     <ClInclude Include="..\include\GeometryShader.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\PrimitiveStriper.h">
+    <ClInclude Include="..\include\LineStriper.h">
+      <Filter>Export Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TriangleStriper.h">
+      <Filter>Export Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\VertexStriper.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
