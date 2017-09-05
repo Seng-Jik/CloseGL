@@ -78,9 +78,15 @@
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h" />
     <ClInclude Include="..\include\GeometryDataFormat.h" />
+    <ClInclude Include="..\include\GeometryPass.h" />
+    <ClInclude Include="..\include\GeometryPipeline.h" />
+    <ClInclude Include="..\include\GeometryShader.h" />
     <ClInclude Include="..\include\PixelArray.h" />
     <ClInclude Include="..\include\PixelFormats.h" />
+    <ClInclude Include="..\include\PrimitiveStriper.h" />
+    <ClInclude Include="..\include\PrimitiveType.h" />
     <ClInclude Include="..\include\Surface.h" />
+    <ClInclude Include="..\include\VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CloseGL.cpp" />
