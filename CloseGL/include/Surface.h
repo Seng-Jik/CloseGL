@@ -9,9 +9,9 @@ namespace CloseGL
 	public:
 		Surface(int width, int height);
 
-		TPixel& GetPixel(int x, int y) final;
-		int GetWidth() final 
-		int GetHeight() final;                          
+		TPixel& GetPixel(int x, int y);
+		int GetWidth();
+		int GetHeight();                          
 
 	private:
 		const int width_, height_;

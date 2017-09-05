@@ -2,6 +2,7 @@
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace CloseGL;
 
 namespace CloseGLTest
 {		
@@ -11,6 +12,7 @@ namespace CloseGLTest
 		
 		TEST_METHOD(TestExport)
 		{
+			Surface<PixelFormats::ColorRGBA<float>> surface;
 		}
 
 	};
