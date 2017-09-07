@@ -20,7 +20,8 @@ namespace CloseGL::Geometry
 		};
 
 		virtual void Process(GeometryPassIO& io) const = 0;		//Warning:It will call in different threads if multithread enabled.
-		virtual bool StripInfoProcessOnly() const = 0;
+		virtual bool OutputStripInfo() const = 0;
+		virtual bool OutputVertexInfo() const = 0;
 		virtual bool MultiThreadProcessEnabled() const;
 	};
 
