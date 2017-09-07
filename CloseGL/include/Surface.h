@@ -21,13 +21,13 @@ namespace CloseGL
 	inline Surface<TPixel>::Surface(int width, int height) :
 		width_(width),
 		height_(height),
-		PixelArray(width*height)
+		PixelArray<TPixel>(width*height)
 	{}
 
 	template<typename TPixel>
 	inline TPixel & Surface<TPixel>::GetPixel(int x, int y)
 	{
-		return *this[y * width + x];
+		return *this[y * width_ + x];
 	}
 
 	template<typename TPixel>
