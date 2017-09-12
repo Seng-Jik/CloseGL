@@ -12,7 +12,6 @@ namespace CloseGL::Geometry
 		{
 			const GeometryDataFormat* DataFormat;
 			const std::vector<TData>* InputVertexData;
-			const size_t ThreadSplitOffset, ThreadSplitCount;
 
 			std::vector<TData>* OutputVertexData;
 			std::vector<bool>* StripInfo;

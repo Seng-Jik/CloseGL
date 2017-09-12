@@ -3,6 +3,7 @@
 #include "GeometryPass.h"
 #include <memory>
 #include <thread>
+#include <algorithm>
 
 //Debug
 #include <iostream>
@@ -15,8 +16,13 @@ namespace CloseGL::Geometry
 	template<typename TData = float>
 	struct GeometryPipelineOutput
 	{
-		std::vector<TData> VertexData;
-		std::vector<bool> StripData;
+		struct ThreadOut
+		{
+			std::unique_ptr<std::vector<TData>> VertexData;
+			std::unique_ptr<std::vector<bool>> StripData;
+		};
+
+		std::vector<ThreadOut> outputs;
 	};
 
 	template<typename TData = float>	//TData = double/float
@@ -32,7 +38,7 @@ namespace CloseGL::Geometry
 		void ClearPass();
 
 	private:
-		static void processThread(const std::vector<TData>& inputData,size_t vertexBegin,size_t vertexCount, GeometryPipelineOutput<TData>& outputData);
+		static void processThread(const std::vector<TData>& inputData,size_t vertexBegin,size_t vertexCount, GeometryPipelineOutput<TData>::ThreadOut& outputData);
 		std::vector<std::shared_ptr<GeometryPass<TData>>> passes_;
 		GeometryDataFormat format_;
 		unsigned childThreads_ = 0;
@@ -105,10 +111,12 @@ namespace CloseGL::Geometry
 		passes_.clear();
 	}
 	template<typename TData>
-	inline void GeometryPipeline<TData>::processThread(const std::vector<TData>& inputData, size_t vertexBegin, size_t vertexCount, GeometryPipelineOutput<TData>& outputData)
+	inline void GeometryPipeline<TData>::processThread(const std::vector<TData>& inputData, size_t vertexBegin, size_t vertexCount, GeometryPipelineOutput<TData>::ThreadOut& outputData)
 	{
 		std::stringstream ss;
 		ss << "ProcessThread:" << inputData.size() << "\t" << vertexBegin << "\t" << vertexCount<<"\t" << &outputData << std::endl;
 		Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(ss.str().c_str());
+
+		std::copy()
 	}
 }
