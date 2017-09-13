@@ -14,15 +14,16 @@
 namespace CloseGL::Geometry
 {
 	template<typename TData = float>
+	struct ThreadOut
+	{
+		std::unique_ptr<std::vector<TData>> VertexData;
+		std::unique_ptr<std::vector<bool>> StripData;
+	};
+
+	template<typename TData = float>
 	struct GeometryPipelineOutput
 	{
-		struct ThreadOut
-		{
-			std::unique_ptr<std::vector<TData>> VertexData;
-			std::unique_ptr<std::vector<bool>> StripData;
-		};
-
-		std::vector<ThreadOut> outputs;
+		std::vector<ThreadOut<TData>> outputs;
 	};
 
 	template<typename TData = float>	//TData = double/float
@@ -38,7 +39,7 @@ namespace CloseGL::Geometry
 		void ClearPass();
 
 	private:
-		static void processThread(const std::vector<TData>& inputData,size_t vertexBegin,size_t vertexCount, GeometryPipelineOutput<TData>::ThreadOut& outputData);
+		static void processThread(const std::vector<TData>& inputData,size_t primitiveBegin,size_t primitiveCount, ThreadOut<TData>& outputData);
 		std::vector<std::shared_ptr<GeometryPass<TData>>> passes_;
 		GeometryDataFormat format_;
 		unsigned childThreads_ = 0;
@@ -69,7 +70,10 @@ namespace CloseGL::Geometry
 
 
 		std::vector<std::thread> threads;
-		GeometryPipelineOutput out;
+		GeometryPipelineOutput<TData> out;
+		out.outputs.emplace_back();
+
+		auto& mainOutput = out.outputs.back();
 
 		const size_t mainThreadCount = primitiveCountEveryThread;
 		size_t offset = mainThreadCount;
@@ -79,11 +83,12 @@ namespace CloseGL::Geometry
 			size_t count = i == childThreads - 1 ? primitiveCount - begin : primitiveCountEveryThread;
 			offset += count;
 
-			outputs.emplace_back();
+			out.outputs.emplace_back();
 
-			threads.emplace_back(processThread,inputData, begin, count, outputs.back());
+			typeinfo(ThreadOut<TData>) == typeinfo(decltype(out.outputs.back()));
+
+			threads.emplace_back(processThread, inputData, begin, count, out.outputs.back());
 		}
-		GeometryPipelineOutput<TData> mainOutput;
 		processThread(inputData, 0, mainThreadCount, mainOutput);
 
 		for (size_t i = 0; i < childThreads; ++i)
@@ -91,7 +96,7 @@ namespace CloseGL::Geometry
 			threads[i].join();
 		}
 
-		return mainOutput;
+		return out;
 	}
 
 
@@ -107,16 +112,13 @@ namespace CloseGL::Geometry
 	{
 		passes_.clear();
 	}
+
 	template<typename TData>
-	inline void GeometryPipeline<TData>::processThread(const std::vector<TData>& inputData, size_t vertexBegin, size_t vertexCount, GeometryPipelineOutput<TData>::ThreadOut& outputData)
+	inline void GeometryPipeline<TData>::processThread(const std::vector<TData>& inputData, size_t primitiveBegin, size_t primitiveCount, ThreadOut<TData>& outputData)
 	{
 		std::stringstream ss;
-		ss << "ProcessThread:" << inputData.size() << "\t" << vertexBegin << "\t" << vertexCount<<"\t" << &outputData << std::endl;
+		ss << "ProcessThread:" << inputData.size() << "\t" << primitiveBegin << "\t" << primitiveCount << "\t" << &outputData << std::endl;
 		Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(ss.str().c_str());
-
-		std::vector<TData> data;
-		//data.resize(
-		std::copy(inputData.cbegin() + vertexBegin,inputData.cbegin() + (vertexBegin + vertexCount),data.begin());
-		
 	}
+
 }
