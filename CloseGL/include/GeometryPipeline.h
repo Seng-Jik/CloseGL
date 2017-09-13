@@ -69,7 +69,7 @@ namespace CloseGL::Geometry
 
 
 		std::vector<std::thread> threads;
-		std::vector<GeometryPipelineOutput<TData>> outputs;
+		GeometryPipelineOutput out;
 
 		const size_t mainThreadCount = primitiveCountEveryThread;
 		size_t offset = mainThreadCount;
@@ -80,8 +80,6 @@ namespace CloseGL::Geometry
 			offset += count;
 
 			outputs.emplace_back();
-			outputs.back().VertexData.reserve(count * format_.ElementCount);
-			outputs.back().StripData.reserve(count * primitiveVertexCount_);
 
 			threads.emplace_back(processThread,inputData, begin, count, outputs.back());
 		}
@@ -91,7 +89,6 @@ namespace CloseGL::Geometry
 		for (size_t i = 0; i < childThreads; ++i)
 		{
 			threads[i].join();
-			//TODO:Merge output.
 		}
 
 		return mainOutput;
