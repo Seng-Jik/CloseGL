@@ -117,6 +117,9 @@ namespace CloseGL::Geometry
 		ss << "ProcessThread:" << inputData.size() << "\t" << vertexBegin << "\t" << vertexCount<<"\t" << &outputData << std::endl;
 		Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(ss.str().c_str());
 
-		std::copy()
+		std::vector<TData> data;
+		//data.resize(
+		std::copy(inputData.cbegin() + vertexBegin,inputData.cbegin() + (vertexBegin + vertexCount),data.begin());
+		
 	}
 }
