@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\Tests">
+      <UniqueIdentifier>{916c9f6b-8944-4752-8c75-4f0cefcfd6d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Toolkit">
+      <UniqueIdentifier>{3c505434-465c-40cc-aa0c-aebbc81a83ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Toolkit">
+      <UniqueIdentifier>{472dd477-2c5b-4f24-84b3-d00a11292165}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,16 +30,25 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TestView.h">
+      <Filter>头文件\Toolkit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryPipelineTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TemplateCompile.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryPipelineTest.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TestView.cpp">
+      <Filter>源文件\Toolkit</Filter>
+    </ClCompile>
+    <ClCompile Include="TestViewTest.cpp">
+      <Filter>源文件\Tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

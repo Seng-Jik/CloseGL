@@ -21,7 +21,7 @@ namespace CloseGLTest
 
 			GeometryPipeline<float,3> pipe(format);
 
-			const size_t PRI_COUNT = 1000000;
+			const size_t PRI_COUNT = 4000000;
 			std::vector<float> vert(format.ElementCount * 3 * PRI_COUNT);
 
 			for (size_t i = 0; i < PRI_COUNT; ++i) {
@@ -30,7 +30,7 @@ namespace CloseGLTest
 			}
 
 			pipe.SetChildThreads(0);
-			pipe.Process(vert,true);
+			pipe.Process(vert,false);
 
 			
 		}
