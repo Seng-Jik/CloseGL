@@ -15,7 +15,6 @@ namespace CloseGL::Geometry
 
 			std::vector<TData>* OutputVertexData;
 			std::vector<bool>* StripInfo;
-			size_t VertexCount;
 		};
 
 		virtual void Process(GeometryPassIO& io) const = 0;		//Warning:It will call in different threads if multithread enabled.
