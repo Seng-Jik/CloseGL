@@ -18,14 +18,5 @@ namespace CloseGL::Geometry
 		};
 
 		virtual void Process(GeometryPassIO& io) const = 0;		//Warning:It will call in different threads if multithread enabled.
-		virtual bool OutputStripInfo() const = 0;
-		virtual bool OutputVertexInfo() const = 0;
-		virtual bool MultiThreadProcessEnabled() const;
 	};
-
-	template<typename TData>
-	inline bool GeometryPass<TData>::MultiThreadProcessEnabled() const
-	{
-		return true;
-	}
 }
