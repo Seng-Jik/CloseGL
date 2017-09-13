@@ -10,13 +10,14 @@ namespace CloseGL::Geometry
 
 		struct GeometryPassIO
 		{
-			const GeometryDataFormat* DataFormat;
-			const std::vector<TData>* InputVertexData;
+			const GeometryDataFormat* const Format;
+			std::vector<TData> VertexData;
+			std::vector<bool> StripData;
 
-			std::vector<TData>* OutputVertexData;
-			std::vector<bool>* StripInfo;
+			GeometryPassIO(const GeometryDataFormat& format) :
+				Format(&format) {}
 		};
 
-		virtual void Process(GeometryPassIO& io) const = 0;		//Warning:It will call in different threads if multithread enabled.
+		virtual void Process(GeometryPassIO& io) const = 0;		//Warning:It will call in different threads
 	};
 }

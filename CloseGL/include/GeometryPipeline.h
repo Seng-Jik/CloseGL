@@ -13,58 +13,58 @@
 
 namespace CloseGL::Geometry
 {
-	template<typename TData = float>
-	struct ThreadOut
-	{
-		std::unique_ptr<std::vector<TData>> VertexData;
-		std::unique_ptr<std::vector<bool>> StripData;
-	};
 
 	template<typename TData = float>
 	struct GeometryPipelineOutput
 	{
-		std::vector<ThreadOut<TData>> outputs;
+		struct ThreadOut
+		{
+			std::vector<TData> VertexData;
+			std::vector<bool> StripData;
+		};
+		std::vector<ThreadOut> outputs;
 	};
 
-	template<typename TData = float>	//TData = double/float
+	template<typename TData = float, int VertexPerPrimitive = 4>	//TData = double/float
 	class GeometryPipeline
 	{
 	public:
 
-		GeometryPipeline(GeometryDataFormat format,int primitiveVertexCount);
+		GeometryPipeline(GeometryDataFormat format);
 		void SetChildThreads(unsigned childThreads);
-		GeometryPipelineOutput<TData> Process(const std::vector<TData>& inputData) const;
+		GeometryPipelineOutput<TData> Process(std::vector<TData>& inputData, bool clearAfterProcess = false) const;
+		//If not readonly,this vector maybe destroyed.
 
 		void AddPass(const std::shared_ptr<const GeometryPass<TData>>& pass);
 		void ClearPass();
 
 	private:
-		static void processThread(const std::vector<TData>& inputData,size_t primitiveBegin,size_t primitiveCount, ThreadOut<TData>& outputData);
+		static void processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<GeometryPass<TData>>>& passes,const GeometryDataFormat& format, std::vector<TData>& inputData,size_t primitiveBegin,size_t primitiveCount, typename GeometryPipelineOutput<TData>::ThreadOut& outputData);
 		std::vector<std::shared_ptr<GeometryPass<TData>>> passes_;
 		GeometryDataFormat format_;
 		unsigned childThreads_ = 0;
-		int primitiveVertexCount_;
 
 	};
 
 
 
-	template<typename TData>
-	inline GeometryPipeline<TData>::GeometryPipeline(GeometryDataFormat format,int primitiveVertexCount):
-		format_(format),
-		primitiveVertexCount_(primitiveVertexCount)
-	{}
+	template<typename TData, int VertexPerPrimitive>
+	inline GeometryPipeline<TData, VertexPerPrimitive>::GeometryPipeline(GeometryDataFormat format):
+		format_(format)
+	{
+	}
 
-	template<typename TData>
-	inline void GeometryPipeline<TData>::SetChildThreads(unsigned childThreads)
+	template<typename TData, int VertexPerPrimitive>
+	inline void GeometryPipeline<TData, VertexPerPrimitive>::SetChildThreads(unsigned childThreads)
 	{
 		childThreads_ = childThreads;
 	}
 
-	template<typename TData>
-	inline GeometryPipelineOutput<TData> GeometryPipeline<TData>::Process(const std::vector<TData>& inputData) const
+
+	template<typename TData, int VertexPerPrimitive>
+	inline GeometryPipelineOutput<TData> GeometryPipeline<TData, VertexPerPrimitive>::Process(std::vector<TData>& inputData, bool clearAfterProcess) const
 	{
-		const size_t primitiveCount = (inputData.size() / format_.ElementCount) / primitiveVertexCount_;
+		const size_t primitiveCount = (inputData.size() / format_.ElementCount) / VertexPerPrimitive;
 		const auto childThreads = primitiveCount  < childThreads_ ? 0 : childThreads_;
 		const size_t primitiveCountEveryThread = primitiveCount / (childThreads + 1);
 
@@ -80,44 +80,63 @@ namespace CloseGL::Geometry
 		for (size_t i = 0; i < childThreads; ++i)
 		{
 			const size_t begin = offset;
-			size_t count = i == childThreads - 1 ? primitiveCount - begin : primitiveCountEveryThread;
+			const size_t count = i == childThreads - 1 ? primitiveCount - begin : primitiveCountEveryThread;
 			offset += count;
 
 			out.outputs.emplace_back();
+			auto& threadOut = out.outputs.back();
 
-			typeinfo(ThreadOut<TData>) == typeinfo(decltype(out.outputs.back()));
-
-			threads.emplace_back(processThread, inputData, begin, count, out.outputs.back());
+			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, threadOut);
 		}
-		processThread(inputData, 0, mainThreadCount, mainOutput);
+		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, mainOutput);
 
 		for (size_t i = 0; i < childThreads; ++i)
 		{
 			threads[i].join();
 		}
 
+		if (clearAfterProcess) inputData.clear();
+
 		return out;
 	}
 
 
-
-	template<typename TData>
-	inline void GeometryPipeline<TData>::AddPass(const std::shared_ptr<const GeometryPass<TData>>& pass)
+	template<typename TData, int VertexPerPrimitive>
+	inline void GeometryPipeline<TData, VertexPerPrimitive>::AddPass(const std::shared_ptr<const GeometryPass<TData>>& pass)
 	{
 		passes_.push_back(pass);
 	}
 
-	template<typename TData>
-	inline void GeometryPipeline<TData>::ClearPass()
+	template<typename TData, int VertexPerPrimitive>
+	inline void GeometryPipeline<TData, VertexPerPrimitive>::ClearPass()
 	{
 		passes_.clear();
 	}
 
-	template<typename TData>
-	inline void GeometryPipeline<TData>::processThread(const std::vector<TData>& inputData, size_t primitiveBegin, size_t primitiveCount, ThreadOut<TData>& outputData)
+	template<typename TData, int VertexPerPrimitive>
+	inline void GeometryPipeline<TData, VertexPerPrimitive>::processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<GeometryPass<TData>>>& passes,const GeometryDataFormat& format, std::vector<TData>& inputData, size_t primitiveBegin, size_t primitiveCount, typename GeometryPipelineOutput<TData>::ThreadOut& outputData)
 	{
+		typename GeometryPass<TData>::GeometryPassIO io(format);
+		io.StripData.resize(primitiveCount*VertexPerPrimitive);
+
+		if (singleThreadAndInputDestroyable)
+		{
+			//Move
+			io.VertexData = std::move(inputData);
+		}
+		else
+		{
+			//Copy
+			io.VertexData.resize(primitiveCount*format.ElementCount*VertexPerPrimitive);
+			auto inputBegin = inputData.cbegin() + primitiveBegin*format.ElementCount*VertexPerPrimitive;
+			std::copy(inputBegin, inputBegin + io.VertexData.size(), io.VertexData.begin());
+		}
+
+		for (const auto& p : passes)
+			p->Process(io);
+
 		std::stringstream ss;
-		ss << "ProcessThread:" << inputData.size() << "\t" << primitiveBegin << "\t" << primitiveCount << "\t" << &outputData << std::endl;
+		ss << "ProcessThread:" << inputData.size() << "\t" << primitiveBegin << "\t" << primitiveCount << "\t" << &outputData <<"\t"<<io.VertexData.at(0)<< std::endl;
 		Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(ss.str().c_str());
 	}
 

@@ -19,25 +19,18 @@ namespace CloseGLTest
 			format.PositionElementOffset = 0;
 			format.PositionElementCount = 2;
 
-			GeometryPipeline<float> pipe(format,3);
+			GeometryPipeline<float,3> pipe(format);
 
-			std::vector<float> vert =
-			{
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0
-			};
-			pipe.SetChildThreads(1);
-			pipe.Process(vert);
+			const size_t PRI_COUNT = 1000000;
+			std::vector<float> vert(format.ElementCount * 3 * PRI_COUNT);
+
+			for (size_t i = 0; i < PRI_COUNT; ++i) {
+				for (unsigned j = 0; j < format.ElementCount * 3; ++j)
+					vert.at(i*format.ElementCount * 3 + j) = static_cast<float>(i);
+			}
+
+			pipe.SetChildThreads(0);
+			pipe.Process(vert,true);
 
 			
 		}
