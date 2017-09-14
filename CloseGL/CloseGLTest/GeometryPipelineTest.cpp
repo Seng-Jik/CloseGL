@@ -19,9 +19,16 @@ namespace CloseGLTest
 			format.PositionElementOffset = 0;
 			format.PositionElementCount = 2;
 
-			GeometryPipeline<float,3> pipe(format);
+			GeometryPipeline<3> pipe(format);
 
-			const size_t PRI_COUNT = 4000000;
+			const auto pVertexShader = std::make_shared<const VertexShader<3>>(
+			[](float* attributes, const GeometryDataFormat&) {
+				attributes[0] = 0;
+			}
+			);
+			pipe.AddPass(std::static_pointer_cast<const CloseGL::Geometry::GeometryPass<3>>(pVertexShader));
+
+			const size_t PRI_COUNT = 200;
 			std::vector<float> vert(format.ElementCount * 3 * PRI_COUNT);
 
 			for (size_t i = 0; i < PRI_COUNT; ++i) {
@@ -29,10 +36,22 @@ namespace CloseGLTest
 					vert.at(i*format.ElementCount * 3 + j) = static_cast<float>(i);
 			}
 
-			pipe.SetChildThreads(0);
-			pipe.Process(vert,false);
+			std::stringstream log;
 
-			
+			pipe.SetChildThreads(0);
+			auto pResult = pipe.Process(vert,false);
+
+			log << "===========" << std::endl;
+			for (auto& out : pResult.outputs)
+				for (auto p : out.VertexData)
+					log << p << " ";
+
+			log << "===========" << std::endl;
+			for (auto& out : pResult.outputs)
+				for (auto p : out.StripData)
+					log << p << " ";
+
+			Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(log.str().c_str());
 		}
 
 	};

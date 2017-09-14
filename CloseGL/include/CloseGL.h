@@ -5,3 +5,4 @@
 #include "Surface.h"
 
 #include "GeometryPipeline.h"
+#include "VertexShader.h"

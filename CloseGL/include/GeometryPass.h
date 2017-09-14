@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
+#include "GeometryDataFormat.h"
 
 namespace CloseGL::Geometry
 {
-	template<typename TData = float>
+	template<int VertexPerPrimitive = 4>
 	class GeometryPass
 	{
 	public:
@@ -11,7 +12,7 @@ namespace CloseGL::Geometry
 		struct GeometryPassIO
 		{
 			const GeometryDataFormat* const Format;
-			std::vector<TData> VertexData;
+			std::vector<float> VertexData;
 			std::vector<bool> StripData;
 
 			GeometryPassIO(const GeometryDataFormat& format) :
