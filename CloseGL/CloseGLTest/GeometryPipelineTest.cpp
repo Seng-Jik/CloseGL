@@ -43,18 +43,21 @@ namespace CloseGLTest
 
 			std::stringstream log;
 
-			pipe.SetChildThreads(0);
+			pipe.SetChildThreads(1);
 			auto pResult = pipe.Process(vert,false);
 
-			log << "===========" << std::endl;
-			for (auto& out : pResult.outputs)
+			
+			for (auto& out : pResult.outputs) {
+				log << std::endl << "===========" << std::endl;
+				log << "OutPtr:" << &out << std::endl;
+				log << std::endl << "Verticle:" << std::endl;
 				for (auto p : out.VertexData)
 					log << p << " ";
-
-			log << "===========" << std::endl;
-			for (auto& out : pResult.outputs)
+				log << std::endl << "Strip:" << std::endl;
 				for (auto p : out.StripData)
 					log << p << " ";
+			}
+
 
 			Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(log.str().c_str());
 		}

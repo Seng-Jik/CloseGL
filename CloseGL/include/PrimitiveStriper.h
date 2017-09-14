@@ -20,7 +20,7 @@ namespace CloseGL::Geometry
 		for (size_t i = 0; i < vtxCount; ++i) 
 		{
 			if (vertexNum >= VertexPerPrimitive) vertexNum = 0;
-			io.StripData[i] = vertexNum++ > 0;
+			io.StripData.at(i) = vertexNum++ > 0;
 			
 		}
 	}

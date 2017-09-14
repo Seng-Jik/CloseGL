@@ -5,12 +5,6 @@
 #include <thread>
 #include <algorithm>
 
-//Debug
-#include <iostream>
-#include <mutex>
-#include <CppUnitTestLogger.h>
-#include <sstream>
-
 namespace CloseGL::Geometry
 {
 
@@ -38,13 +32,11 @@ namespace CloseGL::Geometry
 		void ClearPass();
 
 	private:
-		static void processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData,size_t primitiveBegin,size_t primitiveCount, GeometryPipelineOutput::ThreadOut& outputData);
+		static void processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData,size_t primitiveBegin,size_t primitiveCount, GeometryPipelineOutput::ThreadOut* outputData);
 		std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>> passes_;
 		GeometryDataFormat format_;
 		unsigned childThreads_ = 0;
-
 	};
-
 
 
 	template<int VertexPerPrimitive>
@@ -70,9 +62,8 @@ namespace CloseGL::Geometry
 
 		std::vector<std::thread> threads;
 		GeometryPipelineOutput out;
-		out.outputs.emplace_back();
+		out.outputs.resize(childThreads + 1);
 
-		auto& mainOutput = out.outputs.back();
 
 		const size_t mainThreadCount = primitiveCountEveryThread;
 		size_t offset = mainThreadCount;
@@ -82,17 +73,13 @@ namespace CloseGL::Geometry
 			const size_t count = i == childThreads - 1 ? primitiveCount - begin : primitiveCountEveryThread;
 			offset += count;
 
-			out.outputs.emplace_back();
-			auto& threadOut = out.outputs.back();
 
-			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, threadOut);
+			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, &out.outputs[i]);
 		}
-		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, mainOutput);
 
-		for (size_t i = 0; i < childThreads; ++i)
-		{
-			threads[i].join();
-		}
+		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, &out.outputs[childThreads]);
+
+		for (auto& p : threads) p.join();
 
 		if (clearAfterProcess) inputData.clear();
 
@@ -113,7 +100,7 @@ namespace CloseGL::Geometry
 	}
 
 	template<int VertexPerPrimitive>
-	inline void GeometryPipeline<VertexPerPrimitive>::processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData, size_t primitiveBegin, size_t primitiveCount, typename GeometryPipelineOutput::ThreadOut& outputData)
+	inline void GeometryPipeline<VertexPerPrimitive>::processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData, size_t primitiveBegin, size_t primitiveCount, typename GeometryPipelineOutput::ThreadOut* outputData)
 	{
 		typename GeometryPass<VertexPerPrimitive>::GeometryPassIO io(format);
 		io.StripData.resize(primitiveCount*VertexPerPrimitive);
@@ -134,12 +121,10 @@ namespace CloseGL::Geometry
 		for (const auto& p : passes)
 			p->Process(io);
 
-		outputData.StripData = std::move(io.StripData);
-		outputData.VertexData = std::move(io.VertexData);
-
-		std::stringstream ss;
-		ss << "ProcessThread:" << inputData.size() << "\t" << primitiveBegin << "\t" << primitiveCount << "\t" << &outputData <<"\t"<<outputData.VertexData.at(0)<< std::endl;
-		Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(ss.str().c_str());
+		{
+			outputData->StripData = std::move(io.StripData);
+			outputData->VertexData = std::move(io.VertexData);
+		}
 	}
 
 }
