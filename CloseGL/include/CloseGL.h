@@ -6,3 +6,4 @@
 
 #include "GeometryPipeline.h"
 #include "VertexShader.h"
+#include "PrimitiveStriper.h"

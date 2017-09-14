@@ -48,13 +48,7 @@
     <ClInclude Include="..\include\GeometryShader.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\LineStriper.h">
-      <Filter>Export Header Files\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\TriangleStriper.h">
-      <Filter>Export Header Files\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\VertexStriper.h">
+    <ClInclude Include="..\include\PrimitiveStriper.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,12 +21,17 @@ namespace CloseGLTest
 
 			GeometryPipeline<3> pipe(format);
 
+			//创建三角形Strip信息
+			const auto pStriper = std::make_shared<const PrimitiveStriper<3>>();
+			pipe.AddPass(pStriper);
+
+			//顶点着色器
 			const auto pVertexShader = std::make_shared<const VertexShader<3>>(
 			[](float* attributes, const GeometryDataFormat&) {
 				attributes[0] = 0;
 			}
 			);
-			pipe.AddPass(std::static_pointer_cast<const CloseGL::Geometry::GeometryPass<3>>(pVertexShader));
+			pipe.AddPass(pVertexShader);
 
 			const size_t PRI_COUNT = 200;
 			std::vector<float> vert(format.ElementCount * 3 * PRI_COUNT);

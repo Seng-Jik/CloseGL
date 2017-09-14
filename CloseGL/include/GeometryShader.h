@@ -3,8 +3,4 @@
 
 namespace CloseGL::Geometry
 {
-	class GeometryShader :GeometryPass
-	{
-
-	};
 }
