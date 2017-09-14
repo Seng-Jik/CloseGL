@@ -43,7 +43,7 @@ namespace CloseGLTest
 
 			std::stringstream log;
 
-			pipe.SetChildThreads(1);
+			pipe.SetChildThreads(199);
 			auto pResult = pipe.Process(vert,false);
 
 			
