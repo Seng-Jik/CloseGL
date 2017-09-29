@@ -14,6 +14,10 @@ namespace CloseGLTest
 		TEST_METHOD(TestTestView)
 		{
 			TestView().Run();
+			TestView().SetUpdateFunction([](float time, CloseGL::Surface<CloseGL::PixelFormats::ColorRGBA<float>>& sur) {
+				sur.Clear(CloseGL::PixelFormats::ColorRGBA<float>{0, 255, 255, 255});
+			});
+			
 		}
 
 	};
