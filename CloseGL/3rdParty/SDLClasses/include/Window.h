@@ -31,6 +31,7 @@ namespace SDL
 
 		void ShowSimpleMessageBox(const string& title, const string& msg) const;
 
+		void SetWindowTitle(const string& title);
 		void SetWindowIcon(const Surface& icon);
 
 		GLContext CreateOpenGLContext();
