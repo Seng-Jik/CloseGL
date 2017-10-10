@@ -64,11 +64,11 @@ namespace CloseGLTest
 			PixelPipeline::PixelPipeline::Status status;
 			status.PixelShader = [](const float* arg,const CloseGL::Geometry::GeometryDataFormat& fmt,std::vector<CloseGL::PixelFormats::ColorRGBA<float>>& out) 
 			{
-				out.push_back({ arg[2],arg[3],arg[3],0 });
+				out.push_back({ arg[2],arg[3],1,0 });
 			};
 
 			tv.SetUpdateFunction([raster,&go,&status](float time, CloseGL::Surface<CloseGL::PixelFormats::ColorRGBA<float>>& sur) {
-				sur.Clear(CloseGL::PixelFormats::ColorRGBA<float>{1, 1, 1, 1});
+				sur.Clear(CloseGL::PixelFormats::ColorRGBA<float>{0, 0, 0, 1});
 
 				CloseGL::PixelPipeline::FrameBuffer fb;
 				fb.ColorBuffers.push_back(&sur);
