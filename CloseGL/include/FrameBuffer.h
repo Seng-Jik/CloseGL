@@ -7,7 +7,7 @@ namespace CloseGL::PixelPipeline
 {
 	struct FrameBuffer
 	{
-		std::vector<Surface<PixelFormats::ColorRGBA<float>>> ColorBuffers;
+		std::vector<Surface<PixelFormats::ColorRGBA<float>>*> ColorBuffers;
 		std::unique_ptr<Surface<PixelFormats::ColorR<float>>> DepthBuffer;
 	};
 }

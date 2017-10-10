@@ -19,8 +19,8 @@ class LineRasterizater final :public PixelPipeline
 public:
 	void Draw(const CloseGL::Geometry::GeometryPipelineOutput& input, FrameBuffer& renderTarget, const Status& status) override;
 private:
-	void DrawTask(const Task task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
-	void DrawLine(const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
+	void DrawTask(int outW,int outH,const Task task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
+	void DrawLine(int outW, int outH,const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
 };
 
 std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
@@ -30,7 +30,13 @@ std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
 
 void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & input, FrameBuffer & renderTarget, const Status & status)
 {
-
+	int outWMax = 0, outHMax = 0;
+	for (const auto& cbuffer : renderTarget.ColorBuffers)
+	{
+		auto[outW, outH] = cbuffer->GetSize();
+		outWMax = max(outW, outWMax);
+		outHMax = max(outH, outHMax);
+	}
 
 	queue<Task> tasks;
 
@@ -59,23 +65,23 @@ void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & in
 
 	while (!tasks.empty())
 	{
-		DrawTask(tasks.front(), input.Format,renderTarget,status);
+		DrawTask(outWMax,outHMax,tasks.front(), input.Format,renderTarget,status);
 		tasks.pop();
 	}
 }
 
-void LineRasterizater::DrawTask(const Task task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawTask(int ow,int oh,const Task task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status)
 {
 	for (int head = 0, tail = 1; tail < task.StripSize; head++, tail++)
 	{
 		const float* headVertex = task.Data + head * format.ElementCount;
 		const float* tailVertex = task.Data + head * format.ElementCount;
 
-		DrawLine(headVertex, tailVertex,format,renderTarget,status);
+		DrawLine(ow,oh,headVertex, tailVertex,format,renderTarget,status);
 	}
 }
 
-void LineRasterizater::DrawLine(const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawLine(int ow,int oh,const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status)
 {
 	array<float,4> posHead = { 0,0,0,0 }, posTail = { 0,0,0,0 };
 
@@ -86,7 +92,7 @@ void LineRasterizater::DrawLine(const float * head, const float * tail, const Cl
 		posTail[i] = tail[offset];
 	}
 
-	const size_t step = static_cast<size_t>(fabs(posTail[0] - posHead[0]) + fabs(posTail[1] - posHead[1]));
+	const size_t step = static_cast<size_t>(fabs(posTail[0] - posHead[0])*ow + fabs(posTail[1] - posHead[1])*oh);
 	
 
 	vector<float> vtxLerped;
@@ -121,8 +127,9 @@ void LineRasterizater::DrawLine(const float * head, const float * tail, const Cl
 		{
 			auto& buffer = renderTarget.ColorBuffers[colorBufferIndex];
 
-			const auto [outW,outH] = buffer.GetSize();
-			buffer.GetPixel(static_cast<int>(outW * posV.x), static_cast<int>(outH * posV.y));
+			const auto [outW,outH] = buffer->GetSize();
+			auto& px = buffer->GetPixel(static_cast<int>(outW * posV.x), static_cast<int>(outH * posV.y));
+			status.Blender(pixelOutput[colorBufferIndex], px);
 		}
 
 		pixelOutput.clear();
