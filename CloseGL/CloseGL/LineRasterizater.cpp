@@ -75,7 +75,7 @@ void LineRasterizater::DrawTask(int ow,int oh,const Task task,const CloseGL::Geo
 	for (int head = 0, tail = 1; tail < task.StripSize; head++, tail++)
 	{
 		const float* headVertex = task.Data + head * format.ElementCount;
-		const float* tailVertex = task.Data + head * format.ElementCount;
+		const float* tailVertex = task.Data + tail * format.ElementCount;
 
 		DrawLine(ow,oh,headVertex, tailVertex,format,renderTarget,status);
 	}
@@ -101,7 +101,7 @@ void LineRasterizater::DrawLine(int ow,int oh,const float * head, const float * 
 	vtxLerped.resize(fmt.ElementCount);
 	for (size_t i = 0; i < step; ++i)
 	{
-		const float lerp = i < static_cast<float>(step);
+		const float lerp = i / static_cast<float>(step);
 
 		for (size_t j = 0; j < fmt.UsedElementCount; j++)
 			vtxLerped[j] = Lerp(head[j], tail[j], lerp);
@@ -127,7 +127,8 @@ void LineRasterizater::DrawLine(int ow,int oh,const float * head, const float * 
 		{
 			auto& buffer = renderTarget.ColorBuffers[colorBufferIndex];
 
-			const auto [outW,outH] = buffer->GetSize();
+			auto [outW,outH] = buffer->GetSize();
+			outW -= 1; outH -= 1;
 			auto& px = buffer->GetPixel(static_cast<int>(outW * posV.x), static_cast<int>(outH * posV.y));
 			status.Blender(pixelOutput[colorBufferIndex], px);
 		}
