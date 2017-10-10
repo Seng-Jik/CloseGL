@@ -20,9 +20,10 @@ void CloseGLTest::Toolkit::TestView::Run()
 		sdl_.ProcessEvents();
 
 		if (sdl_.QuitRequested()) break;
+		
+		update_((sdl_.GetTicks() - beginTime) / 1000.0f, sur_);
 
-		auto& sur = wnd_.GetWindowSurface();
-		sur.Shade([this](int x, int y, Surface& thisSurface, auto nowColor)
+		wnd_.GetWindowSurface().Shade([this](int x, int y, Surface& thisSurface, auto nowColor)
 		{
 			const auto& p = sur_.GetPixel(x, y);
 			return Color<uint8_t>{
