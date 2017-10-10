@@ -28,9 +28,13 @@ namespace CloseGLTest
 			out.StripData.push_back(false);
 			out.VertexData.push_back(0);
 			out.VertexData.push_back(0);
+			out.VertexData.push_back(0);
+			out.VertexData.push_back(0);
 
 			//V1
 			out.StripData.push_back(true);
+			out.VertexData.push_back(1);
+			out.VertexData.push_back(1);
 			out.VertexData.push_back(1);
 			out.VertexData.push_back(1);
 
