@@ -4,5 +4,5 @@
 
 namespace CloseGL::PixelPipeline
 {
-	std::shared_ptr<PixelPipeline> CreatePointRasterizater();
+	std::shared_ptr<PixelPipeline> CreateLineRasterizater();
 }

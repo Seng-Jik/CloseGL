@@ -60,9 +60,6 @@
     <ClInclude Include="..\include\PixelPipeline.h">
       <Filter>Export Header Files\PixelPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\PointRasterizater.h">
-      <Filter>Export Header Files\PixelPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\LineRasterizater.h">
       <Filter>Export Header Files\PixelPipeline</Filter>
     </ClInclude>
@@ -72,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CloseGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\LineRasterizater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

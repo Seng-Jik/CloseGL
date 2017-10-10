@@ -91,12 +91,12 @@
     <ClInclude Include="..\include\PixelArray.h" />
     <ClInclude Include="..\include\PixelFormats.h" />
     <ClInclude Include="..\include\PixelPipeline.h" />
-    <ClInclude Include="..\include\PointRasterizater.h" />
     <ClInclude Include="..\include\Surface.h" />
     <ClInclude Include="..\include\VertexShader.h" />
     <ClInclude Include="..\include\PrimitiveStriper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\LineRasterizater.cpp" />
     <ClCompile Include="CloseGL.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
