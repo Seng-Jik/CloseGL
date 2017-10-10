@@ -45,12 +45,26 @@ namespace CloseGLTest
 			out.VertexData.push_back(0);
 			out.VertexData.push_back(1);
 
+			//V3 P1
+			out.StripData.push_back(false);
+			out.VertexData.push_back(0.75);
+			out.VertexData.push_back(0.25);
+			out.VertexData.push_back(0);
+			out.VertexData.push_back(1);
+
+			//V4 P1
+			out.StripData.push_back(true);
+			out.VertexData.push_back(0.25);
+			out.VertexData.push_back(0.25);
+			out.VertexData.push_back(1);
+			out.VertexData.push_back(1);
+
 			auto raster = CloseGL::PixelPipeline::CreateLineRasterizater();
 			
 			PixelPipeline::PixelPipeline::Status status;
 			status.PixelShader = [](const float* arg,const CloseGL::Geometry::GeometryDataFormat& fmt,std::vector<CloseGL::PixelFormats::ColorRGBA<float>>& out) 
 			{
-				out.push_back({ arg[2],arg[3],0,0 });
+				out.push_back({ arg[2],arg[3],arg[3],0 });
 			};
 
 			tv.SetUpdateFunction([raster,&go,&status](float time, CloseGL::Surface<CloseGL::PixelFormats::ColorRGBA<float>>& sur) {
