@@ -13,7 +13,7 @@ namespace CloseGLTest
 
 		TEST_METHOD(DrawColoredLine)
 		{
-			TestView tv;
+			TestView tv(50000);
 
 			Geometry::GeometryPipelineOutput go;
 			go.Format.ElementCount = 4;
