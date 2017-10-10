@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h" />
+    <ClInclude Include="..\include\MathUtils.h" />
     <ClInclude Include="..\include\TriangleRasterizater.h" />
     <ClInclude Include="..\include\FrameBuffer.h" />
     <ClInclude Include="..\include\GeometryDataFormat.h" />
@@ -92,12 +93,13 @@
     <ClInclude Include="..\include\PixelFormats.h" />
     <ClInclude Include="..\include\PixelPipeline.h" />
     <ClInclude Include="..\include\Surface.h" />
+    <ClInclude Include="..\include\Vectors.h" />
     <ClInclude Include="..\include\VertexShader.h" />
     <ClInclude Include="..\include\PrimitiveStriper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\LineRasterizater.cpp" />
     <ClCompile Include="CloseGL.cpp" />
+    <ClCompile Include="LineRasterizater.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

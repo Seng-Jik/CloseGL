@@ -22,6 +22,9 @@
     <Filter Include="Export Header Files\PixelPipeline">
       <UniqueIdentifier>{742d3c81-b819-4202-84e4-7ac1c577fd07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Export Header Files\Math">
+      <UniqueIdentifier>{813b9e6e-32a0-44d6-b005-fae13a93a988}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h">
@@ -66,12 +69,18 @@
     <ClInclude Include="..\include\TriangleRasterizater.h">
       <Filter>Export Header Files\PixelPipeline</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\MathUtils.h">
+      <Filter>Export Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Vectors.h">
+      <Filter>Export Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CloseGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\LineRasterizater.cpp">
+    <ClCompile Include="LineRasterizater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
