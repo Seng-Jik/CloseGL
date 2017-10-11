@@ -19,6 +19,6 @@ namespace CloseGL::PixelPipeline
 			int ChildThreads = 0;
 		};
 
-		virtual void Draw(const Geometry::GeometryPipelineOutput& input,FrameBuffer& renderTarget, const Status& status) = 0;
+		virtual void Draw(const Geometry::GeometryPipelineOutput& input,FrameBuffer& renderTarget, const Status& status) const = 0;
 	};
 }

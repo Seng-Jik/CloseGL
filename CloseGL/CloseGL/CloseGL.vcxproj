@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClCompile Include="LineRasterizater.cpp" />
     <ClCompile Include="PrimitiveSpliter.cpp" />
+    <ClCompile Include="TriangleRasterizater.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

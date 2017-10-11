@@ -6,7 +6,7 @@ using namespace CloseGLTest::Toolkit;
 
 namespace CloseGLTest
 {
-	TEST_CLASS(TestLineRasterizer)
+	TEST_CLASS(TestLineRasterizater)
 	{
 	public:
 

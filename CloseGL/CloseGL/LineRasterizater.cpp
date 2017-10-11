@@ -12,10 +12,10 @@ using namespace CloseGL::PixelPipeline;
 class LineRasterizater final :public PixelPipeline
 {
 public:
-	void Draw(const CloseGL::Geometry::GeometryPipelineOutput& input, FrameBuffer& renderTarget, const Status& status) override;
+	void Draw(const CloseGL::Geometry::GeometryPipelineOutput& input, FrameBuffer& renderTarget, const Status& status) const override;
 private:
-	void DrawTask(Vector2<int> bufferSize,const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
-	void DrawLine(Vector2<int> bufferSize,const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
+	void DrawTask(Vector2<int> bufferSize,const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status) const;
+	void DrawLine(Vector2<int> bufferSize,const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status) const;
 };
 
 std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
@@ -23,7 +23,7 @@ std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
 	return std::make_shared<LineRasterizater>();
 }
 
-void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & input, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & input, FrameBuffer & renderTarget, const Status & status) const
 {
 	const auto tasks = CloseGL::Utils::SplitPrimitive(input);
 
@@ -31,7 +31,7 @@ void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & in
 		DrawTask(renderTarget.GetMaxColorBufferSize(), task, input.Format, renderTarget, status);
 }
 
-void LineRasterizater::DrawTask(Vector2<int> bufferSize, const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawTask(Vector2<int> bufferSize, const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status) const
 {
 	for (int head = 0, tail = 1; tail < task.StripSize; head++, tail++)
 	{
@@ -42,7 +42,7 @@ void LineRasterizater::DrawTask(Vector2<int> bufferSize, const CloseGL::Utils::P
 	}
 }
 
-void LineRasterizater::DrawLine(Vector2<int> bufferSize,const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawLine(Vector2<int> bufferSize,const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status) const
 {
 	array<float,4> posHead = { 0,0,0,0 }, posTail = { 0,0,0,0 };
 

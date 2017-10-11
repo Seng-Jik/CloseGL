@@ -185,8 +185,9 @@
     <ClInclude Include="TestView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TestTriangleRasterizater.cpp" />
     <ClCompile Include="GeometryPipelineTest.cpp" />
-    <ClCompile Include="LineRasterizerTest.cpp" />
+    <ClCompile Include="LineRasterizaterTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

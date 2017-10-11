@@ -50,7 +50,10 @@
     <ClCompile Include="TestViewTest.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="LineRasterizerTest.cpp">
+    <ClCompile Include="LineRasterizaterTest.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TestTriangleRasterizater.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
   </ItemGroup>
