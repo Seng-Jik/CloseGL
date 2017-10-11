@@ -3,24 +3,19 @@
 #include "MathUtils.h"
 #include "Vectors.h"
 #include "LineRasterizater.h"
+#include "PrimitiveSpliter.h"
 
 using namespace std;
 using namespace CloseGL::Math;
 using namespace CloseGL::PixelPipeline;
-
-struct Task
-{
-	const float* Data = nullptr;
-	size_t StripSize = 0;
-};
 
 class LineRasterizater final :public PixelPipeline
 {
 public:
 	void Draw(const CloseGL::Geometry::GeometryPipelineOutput& input, FrameBuffer& renderTarget, const Status& status) override;
 private:
-	void DrawTask(int outW,int outH,const Task task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
-	void DrawLine(int outW, int outH,const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
+	void DrawTask(Vector2<int> bufferSize,const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
+	void DrawLine(Vector2<int> bufferSize,const float* head, const float* tail, const CloseGL::Geometry::GeometryDataFormat&, FrameBuffer& renderTarget, const Status& status);
 };
 
 std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
@@ -30,58 +25,24 @@ std::shared_ptr<PixelPipeline> CloseGL::PixelPipeline::CreateLineRasterizater()
 
 void LineRasterizater::Draw(const CloseGL::Geometry::GeometryPipelineOutput & input, FrameBuffer & renderTarget, const Status & status)
 {
-	int outWMax = 0, outHMax = 0;
-	for (const auto& cbuffer : renderTarget.ColorBuffers)
-	{
-		auto[outW, outH] = cbuffer->GetSize();
-		outWMax = max(outW, outWMax);
-		outHMax = max(outH, outHMax);
-	}
+	const auto tasks = CloseGL::Utils::SplitPrimitive(input);
 
-	queue<Task> tasks;
-
-	Task task;
-	for (const auto& inputVec : input.Outputs)
-	{
-		const size_t vertexCount = inputVec.VertexData.size() / input.Format.ElementCount;
-
-		for (int i = 0; i < vertexCount; ++i)
-		{
-			const bool stripFlag = inputVec.StripData[i];
-			if (stripFlag)
-			{
-				task.StripSize++;
-			}
-			else 
-			{
-				if(task.Data) tasks.push(task);
-				task.Data = &inputVec.VertexData[i * input.Format.ElementCount];
-				task.StripSize = 1;
-			}
-		}
-
-		tasks.push(task);
-	}
-
-	while (!tasks.empty())
-	{
-		DrawTask(outWMax,outHMax,tasks.front(), input.Format,renderTarget,status);
-		tasks.pop();
-	}
+	for (const auto& task : tasks)
+		DrawTask(renderTarget.GetMaxColorBufferSize(), task, input.Format, renderTarget, status);
 }
 
-void LineRasterizater::DrawTask(int ow,int oh,const Task task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawTask(Vector2<int> bufferSize, const CloseGL::Utils::PrimitiveFromVerticleData& task,const CloseGL::Geometry::GeometryDataFormat& format, FrameBuffer & renderTarget, const Status & status)
 {
 	for (int head = 0, tail = 1; tail < task.StripSize; head++, tail++)
 	{
 		const float* headVertex = task.Data + head * format.ElementCount;
 		const float* tailVertex = task.Data + tail * format.ElementCount;
 
-		DrawLine(ow,oh,headVertex, tailVertex,format,renderTarget,status);
+		DrawLine(bufferSize,headVertex, tailVertex,format,renderTarget,status);
 	}
 }
 
-void LineRasterizater::DrawLine(int ow,int oh,const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status)
+void LineRasterizater::DrawLine(Vector2<int> bufferSize,const float * head, const float * tail, const CloseGL::Geometry::GeometryDataFormat & fmt, FrameBuffer & renderTarget, const Status & status)
 {
 	array<float,4> posHead = { 0,0,0,0 }, posTail = { 0,0,0,0 };
 
@@ -92,7 +53,7 @@ void LineRasterizater::DrawLine(int ow,int oh,const float * head, const float * 
 		posTail[i] = tail[offset];
 	}
 
-	const size_t step = static_cast<size_t>(fabs(posTail[0] - posHead[0])*ow + fabs(posTail[1] - posHead[1])*oh);
+	const size_t step = static_cast<size_t>(fabs(posTail[0] - posHead[0])*bufferSize.x + fabs(posTail[1] - posHead[1])*bufferSize.y);
 	
 
 	vector<float> vtxLerped;

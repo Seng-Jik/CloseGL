@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "TestView.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace CloseGL;
@@ -13,7 +12,7 @@ namespace CloseGLTest
 
 		TEST_METHOD(TestTestView)
 		{
-			TestView tv;
+			TestView tv(1000);
 			
 			tv.SetUpdateFunction([](float time, CloseGL::Surface<CloseGL::PixelFormats::ColorRGBA<float>>& sur) {
 				sur.Clear(CloseGL::PixelFormats::ColorRGBA<float>{0, 1, 1, 1});

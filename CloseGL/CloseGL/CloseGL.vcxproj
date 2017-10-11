@@ -82,12 +82,12 @@
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h" />
     <ClInclude Include="..\include\MathUtils.h" />
+    <ClInclude Include="..\include\PrimitiveSpliter.h" />
     <ClInclude Include="..\include\TriangleRasterizater.h" />
     <ClInclude Include="..\include\FrameBuffer.h" />
     <ClInclude Include="..\include\GeometryDataFormat.h" />
     <ClInclude Include="..\include\GeometryPass.h" />
     <ClInclude Include="..\include\GeometryPipeline.h" />
-    <ClInclude Include="..\include\GeometryShader.h" />
     <ClInclude Include="..\include\LineRasterizater.h" />
     <ClInclude Include="..\include\PixelArray.h" />
     <ClInclude Include="..\include\PixelFormats.h" />
@@ -98,8 +98,8 @@
     <ClInclude Include="..\include\PrimitiveStriper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CloseGL.cpp" />
     <ClCompile Include="LineRasterizater.cpp" />
+    <ClCompile Include="PrimitiveSpliter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

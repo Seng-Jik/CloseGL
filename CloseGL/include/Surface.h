@@ -1,6 +1,6 @@
 #pragma once
-#include <tuple>
 #include <PixelArray.h>
+#include "Vectors.h"
 
 namespace CloseGL
 {
@@ -10,39 +10,26 @@ namespace CloseGL
 	public:
 		Surface(int width, int height);
 
-		TPixel& GetPixel(int x, int y);
-		int GetWidth() const;
-		int GetHeight() const;                          
-		std::tuple<int, int> GetSize() const;
+		TPixel& GetPixel(int x, int y);                     
+		Math::Vector2<int> GetSize() const;
 	private:
-		const std::tuple<int, int> size_;
+		const Math::Vector2<int> size_;
 	};
 
 	template<typename TPixel>
 	inline Surface<TPixel>::Surface(int width, int height) :
-		size_(width,height),
+		size_{ width,height },
 		PixelArray<TPixel>(width * height)
 	{}
 
 	template<typename TPixel>
 	inline TPixel & Surface<TPixel>::GetPixel(int x, int y)
 	{
-		return (*this)[y * std::get<0>(size_) + x];
+		return (*this)[y * size_.x + x];
 	}
 
 	template<typename TPixel>
-	inline int Surface<TPixel>::GetWidth() const
-	{
-		return std::get<0>(size_);
-	}
-
-	template<typename TPixel>
-	inline int Surface<TPixel>::GetHeight() const
-	{
-		return std::get<1>(size_);
-	}
-	template<typename TPixel>
-	inline std::tuple<int, int> Surface<TPixel>::GetSize() const
+	inline Math::Vector2<int> Surface<TPixel>::GetSize() const
 	{
 		return size_;
 	}

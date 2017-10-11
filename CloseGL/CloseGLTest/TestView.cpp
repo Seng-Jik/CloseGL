@@ -1,8 +1,5 @@
 #include "stdafx.h"
-#include "TestView.h"
 #include <Vector4.h>
-#include <SDLInstance.h>
-#include <SDL.h>
 
 using namespace SDL;
 CloseGLTest::Toolkit::TestView::TestView(uint64_t timeout,int width, int height):

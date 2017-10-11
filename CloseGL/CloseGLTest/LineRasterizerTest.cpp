@@ -1,6 +1,5 @@
 #include "stdafx.h"
-#include "TestView.h"
-#include <LineRasterizater.h>
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace CloseGL;
 using namespace CloseGLTest::Toolkit;
@@ -13,7 +12,7 @@ namespace CloseGLTest
 
 		TEST_METHOD(DrawColoredLine)
 		{
-			TestView tv(50000);
+			TestView tv(2000);
 
 			Geometry::GeometryPipelineOutput go;
 			go.Format.ElementCount = 4;

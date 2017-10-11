@@ -25,6 +25,9 @@
     <Filter Include="Export Header Files\Math">
       <UniqueIdentifier>{813b9e6e-32a0-44d6-b005-fae13a93a988}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Export Header Files\Utils">
+      <UniqueIdentifier>{43db29c0-820d-4021-9345-7f6af508e1c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h">
@@ -51,9 +54,6 @@
     <ClInclude Include="..\include\VertexShader.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\GeometryShader.h">
-      <Filter>Export Header Files\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\PrimitiveStriper.h">
       <Filter>Export Header Files\Geometry</Filter>
     </ClInclude>
@@ -75,12 +75,15 @@
     <ClInclude Include="..\include\Vectors.h">
       <Filter>Export Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\PrimitiveSpliter.h">
+      <Filter>Export Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CloseGL.cpp">
+    <ClCompile Include="LineRasterizater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LineRasterizater.cpp">
+    <ClCompile Include="PrimitiveSpliter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
