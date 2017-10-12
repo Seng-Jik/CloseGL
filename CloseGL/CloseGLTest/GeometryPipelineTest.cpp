@@ -43,8 +43,11 @@ namespace CloseGLTest
 
 			std::stringstream log;
 
+			std::vector<bool> stripData;
+			stripData.resize(PRI_COUNT * 3);
+
 			pipe.SetChildThreads(3);
-			auto pResult = pipe.Process(vert,false);
+			auto pResult = pipe.Process(vert, stripData,false);
 
 			
 			for (auto& out : pResult.Outputs) {

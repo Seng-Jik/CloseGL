@@ -26,14 +26,13 @@ namespace CloseGL::Geometry
 
 		GeometryPipeline(GeometryDataFormat format);
 		void SetChildThreads(unsigned childThreads);
-		GeometryPipelineOutput Process(std::vector<float>& inputData, bool clearAfterProcess = false) const;
+		GeometryPipelineOutput Process(std::vector<float>& inputData, std::vector<bool>& stripData, bool clearAfterProcess = false) const;
 		//If not readonly,this vector maybe destroyed.
 
 		void AddPass(const std::shared_ptr<const GeometryPass<VertexPerPrimitive>>& pass);
 		void ClearPass();
-
 	private:
-		static void processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData,size_t primitiveBegin,size_t primitiveCount, GeometryPipelineOutput::ThreadOut* outputData);
+		static void processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData,size_t primitiveBegin,size_t primitiveCount, GeometryPipelineOutput::ThreadOut* outputData, std::vector<bool>& stripData);
 		std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>> passes_;
 		GeometryDataFormat format_;
 		unsigned childThreads_ = 0;
@@ -54,7 +53,7 @@ namespace CloseGL::Geometry
 
 
 	template<int VertexPerPrimitive>
-	inline GeometryPipelineOutput GeometryPipeline<VertexPerPrimitive>::Process(std::vector<float>& inputData, bool clearAfterProcess) const
+	inline GeometryPipelineOutput GeometryPipeline<VertexPerPrimitive>::Process(std::vector<float>& inputData, std::vector<bool>& stripData, bool clearAfterProcess) const
 	{
 		const size_t primitiveCount = (inputData.size() / format_.ElementCount) / VertexPerPrimitive;
 		const auto childThreads = primitiveCount  < childThreads_ ? 0 : childThreads_;
@@ -76,10 +75,10 @@ namespace CloseGL::Geometry
 			offset += count;
 
 
-			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, &out.Outputs[i]);
+			threads.emplace_back(processThread, false, passes_,format_, inputData, begin, count, &out.Outputs[i],stripData);
 		}
 
-		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, &out.Outputs[childThreads]);
+		processThread(childThreads == 0 && clearAfterProcess, passes_,format_, inputData,0, mainThreadCount, &out.Outputs[childThreads],stripData);
 
 		for (auto& p : threads) p.join();
 
@@ -102,15 +101,16 @@ namespace CloseGL::Geometry
 	}
 
 	template<int VertexPerPrimitive>
-	inline void GeometryPipeline<VertexPerPrimitive>::processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData, size_t primitiveBegin, size_t primitiveCount, typename GeometryPipelineOutput::ThreadOut* outputData)
+	inline void GeometryPipeline<VertexPerPrimitive>::processThread(bool singleThreadAndInputDestroyable, const std::vector<std::shared_ptr<const GeometryPass<VertexPerPrimitive>>>& passes,const GeometryDataFormat& format, std::vector<float>& inputData, size_t primitiveBegin, size_t primitiveCount, typename GeometryPipelineOutput::ThreadOut* outputData, std::vector<bool>& stripData)
 	{
 		typename GeometryPass<VertexPerPrimitive>::GeometryPassIO io(format);
-		io.StripData.resize(primitiveCount*VertexPerPrimitive);
+		//io.StripData.resize(primitiveCount*VertexPerPrimitive);
 
 		if (singleThreadAndInputDestroyable)
 		{
 			//Move
 			io.VertexData = std::move(inputData);
+			io.StripData = std::move(stripData);
 		}
 		else
 		{
@@ -118,8 +118,12 @@ namespace CloseGL::Geometry
 			io.VertexData.resize(primitiveCount*format.ElementCount*VertexPerPrimitive);
 			auto inputBegin = inputData.cbegin() + primitiveBegin*format.ElementCount*VertexPerPrimitive;
 			std::copy(inputBegin, inputBegin + io.VertexData.size(), io.VertexData.begin());
-		}
 
+			io.StripData.resize(primitiveCount*VertexPerPrimitive);
+			auto stripBegin = stripData.cbegin() + primitiveBegin * VertexPerPrimitive;
+			std::copy(stripBegin, stripBegin + io.StripData.size(), io.StripData.begin());
+		}
+		
 		for (const auto& p : passes)
 			p->Process(io);
 
