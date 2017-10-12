@@ -25,7 +25,10 @@ namespace CloseGL::Geometry
 	public:
 
 		GeometryPipeline(GeometryDataFormat format);
-		void SetChildThreads(unsigned childThreads);
+
+		//		Warning£ºIf you want to modify strip data in geometry pass, and it may push a striping vertex as a head of vertex buffer,you must 
+		//set child threads to 0 to make no striping vertex as head of thread output set.
+		void SetChildThreads(unsigned childThreads);	
 		GeometryPipelineOutput Process(std::vector<float>& inputData, std::vector<bool>& stripData, bool clearAfterProcess = false) const;
 		//If not readonly,this vector maybe destroyed.
 
