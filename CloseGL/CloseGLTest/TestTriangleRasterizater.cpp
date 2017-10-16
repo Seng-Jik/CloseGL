@@ -13,7 +13,7 @@ namespace CloseGLTest
 
 		TEST_METHOD(DrawColoredTriangle)
 		{
-			TestView tv(50000);
+			TestView tv(5000);
 
 			Geometry::GeometryPipelineOutput go;
 			go.Format.ElementCount = 4;
@@ -94,15 +94,15 @@ namespace CloseGLTest
 
 			//V2 P0
 			out.StripData.push_back(true);
-			out.VertexData.push_back(0.25);
-			out.VertexData.push_back(0.75);
+			out.VertexData.push_back(0.25f);
+			out.VertexData.push_back(0.75f);
 			out.VertexData.push_back(0);
 			out.VertexData.push_back(1);
 
 			//V2 P0
 			out.StripData.push_back(true);
-			out.VertexData.push_back(0.05);
-			out.VertexData.push_back(0.99);
+			out.VertexData.push_back(0.05f);
+			out.VertexData.push_back(0.99f);
 			out.VertexData.push_back(0);
 			out.VertexData.push_back(1);
 
