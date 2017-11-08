@@ -88,7 +88,9 @@ void LineRasterizater::DrawLine(Vector2<int> bufferSize,const float * head, cons
 		{
 			auto& buffer = renderTarget.ColorBuffers[colorBufferIndex];
 
-			auto [outW,outH] = buffer->GetSize();
+			auto p = buffer->GetSize();
+			auto outW = p.x;
+			auto outH = p.y;
 			outW -= 1; outH -= 1;
 			auto& px = buffer->GetPixel(static_cast<int>(outW * posV.x), static_cast<int>(outH * posV.y));
 			status.Blender(pixelOutput[colorBufferIndex], px);
