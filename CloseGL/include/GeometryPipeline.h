@@ -30,6 +30,7 @@ namespace CloseGL::Geometry
 		//set child threads to 0 to make no striping vertex as head of thread output set.
 		void SetChildThreads(unsigned childThreads);	
 		GeometryPipelineOutput Process(std::vector<float>& inputData, std::vector<bool>& stripData, bool clearAfterProcess = false) const;
+		GeometryPipelineOutput Process(const std::vector<float>& inputData, const std::vector<bool>& stripData) const;
 		//If not readonly,this vector maybe destroyed.
 
 		void AddPass(const std::shared_ptr<const GeometryPass<VertexPerPrimitive>>& pass);
@@ -88,6 +89,14 @@ namespace CloseGL::Geometry
 		if (clearAfterProcess) inputData.clear();
 
 		return out;
+	}
+
+	template<int VertexPerPrimitive>
+	inline GeometryPipelineOutput GeometryPipeline<VertexPerPrimitive>::Process(const std::vector<float>& inputData, const std::vector<bool>& stripData) const
+	{
+		std::vector<float>& input = const_cast<std::vector<float>&>(inputData);
+		std::vector<bool>& strip = const_cast<std::vector<bool>&>(stripData);
+		return Process(input, strip);
 	}
 
 

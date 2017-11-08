@@ -28,6 +28,9 @@
     <Filter Include="Export Header Files\Utils">
       <UniqueIdentifier>{43db29c0-820d-4021-9345-7f6af508e1c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Export Header Files\CloseLogo">
+      <UniqueIdentifier>{bff1528e-4c00-4663-a3ee-26508106ed31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CloseGL.h">
@@ -77,6 +80,12 @@
     </ClInclude>
     <ClInclude Include="..\include\PrimitiveSpliter.h">
       <Filter>Export Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ClassicLogo.h">
+      <Filter>Export Header Files\CloseLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\LogoWorld.h">
+      <Filter>Export Header Files\CloseLogo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

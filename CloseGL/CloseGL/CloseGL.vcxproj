@@ -80,7 +80,9 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ClassicLogo.h" />
     <ClInclude Include="..\include\CloseGL.h" />
+    <ClInclude Include="..\include\LogoWorld.h" />
     <ClInclude Include="..\include\MathUtils.h" />
     <ClInclude Include="..\include\PrimitiveSpliter.h" />
     <ClInclude Include="..\include\TriangleRasterizater.h" />
