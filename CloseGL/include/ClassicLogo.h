@@ -33,7 +33,7 @@ namespace CloseGL::Logo
 	template<typename TVertexBase>
 	inline void ClassicLogo<TVertexBase>::Resize(TVertexBase factor)
 	{
-		position_ *= factor;
+		position_ = position_ * factor;
 	}
 
 	template<typename TVertexBase>
@@ -41,13 +41,14 @@ namespace CloseGL::Logo
 	{
 		//暂时没写Matrix，暂时糊上
 		const auto s = step_;
-		step_.x = s.x * cos(angle) - s.y * sin(angle);
-		step_.y = s.x * sin(angle) + s.y * cos(angle);
+		const auto rad = angle * 3.1415926 / 180;
+		step_.x = static_cast<float>(s.x * cos(rad) - s.y * sin(rad));
+		step_.y = static_cast<float>(s.x * sin(rad) + s.y * cos(rad));
 	}
 
 	template<typename TVertexBase>
 	inline void ClassicLogo<TVertexBase>::Forward()
 	{
-		position_ += step_;
+		position_ = position_ + step_;
 	}
 }

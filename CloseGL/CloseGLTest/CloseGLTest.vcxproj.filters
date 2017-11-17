@@ -33,6 +33,9 @@
     <ClInclude Include="TestView.h">
       <Filter>头文件\Toolkit</Filter>
     </ClInclude>
+    <ClInclude Include="CloseLogoCamera.h">
+      <Filter>头文件\Toolkit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -55,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="TestTriangleRasterizater.cpp">
       <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="CloseLogoTest.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="CloseLogoCamera.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

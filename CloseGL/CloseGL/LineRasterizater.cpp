@@ -92,8 +92,13 @@ void LineRasterizater::DrawLine(Vector2<int> bufferSize,const float * head, cons
 			auto outW = p.x;
 			auto outH = p.y;
 			outW -= 1; outH -= 1;
-			auto& px = buffer->GetPixel(static_cast<int>(outW * posV.x), static_cast<int>(outH * posV.y));
-			status.Blender(pixelOutput[colorBufferIndex], px);
+
+			const auto finalX = static_cast<int>(outW * posV.x), finalY = static_cast<int>(outH * posV.y);
+			if (finalX >= 0 && finalX < outW && finalY >= 0 && finalY < outH)
+			{
+				auto& px = buffer->GetPixel(finalX, finalY);
+				status.Blender(pixelOutput[colorBufferIndex], px);
+			}
 		}
 
 		pixelOutput.clear();
